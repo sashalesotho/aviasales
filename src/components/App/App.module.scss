@@ -1,0 +1,72 @@
+$bg-color: #f8ffff;
+$font-color: #4a4a4a;
+$active: #2196f3;
+$btn: #ffffff;
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  background-color: $bg-color;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: $font-color;
+}
+
+.container {
+  width: 754px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -4px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 20px;
+}
+
+.tickets {
+  flex-grow: 2;
+}
+
+.btn {
+  font-weight: 600;
+  flex-grow: 1;
+  height: 50px;
+  background-color: $btn;
+  border: 1px solid #dfe5ec;
+  transition: 200ms;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  outline: none;
+}
+
+.btn:hover {
+  background-color: $active;
+  color: $bg-color;
+  outline: none;
+}

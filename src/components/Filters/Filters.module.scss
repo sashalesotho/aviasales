@@ -1,0 +1,36 @@
+$bg-color: #ffffff;
+$active: #2196f3;
+$font-color: #4a4a4a;
+
+.tabs-container {
+  display: flex;
+  width: 100%;
+  height: 50px;
+}
+
+.tabs-button {
+  font-weight: 600;
+  flex-grow: 1;
+  background-color: $bg-color;
+  border: 1px solid #dfe5ec;
+  color: $font-color;
+  transition: 200ms;
+  cursor: pointer;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.tabs-button:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.tabs-button:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.tabs-button:hover,
+.tabs-button:active {
+  background-color: $active;
+  color: $bg-color;
+}
