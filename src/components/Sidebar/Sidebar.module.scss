@@ -1,7 +1,7 @@
 $bg-color: #ffffff;
 $hover: #f1fcff;
 
-.filter {
+.sidebar {
   margin-right: 20px;
   width: 232px;
   height: 252px;
@@ -10,7 +10,7 @@ $hover: #f1fcff;
   border-radius: 5px;
 }
 
-.filter-set {
+.filter {
   display: flex;
   flex-direction: column;
   border: none;
@@ -20,7 +20,7 @@ $hover: #f1fcff;
   padding: 0px;
 }
 
-.filter-title {
+.title {
   padding-left: 20px;
   line-height: 12px;
   letter-spacing: 0.5px;
@@ -28,7 +28,7 @@ $hover: #f1fcff;
   text-transform: uppercase;
 }
 
-.filter-label {
+.label {
   padding-left: 50px;
   height: 40px;
   display: flex;
@@ -36,24 +36,24 @@ $hover: #f1fcff;
   cursor: pointer;
 }
 
-.filter-label:hover {
+.label:hover {
   background-color: $hover;
 }
 
-.filter-box {
+.box {
   appearance: none;
   position: absolute;
 }
 
-.filter-set + .filter-label {
+.filter + .label {
   margin-top: 20px;
 }
 
-.filter-label + .filter-box {
+.abel + .box {
   margin: 0;
 }
 
-.filter-label > p {
+.label > p {
   margin: 0;
   align-self: center;
   font-size: 13px;
@@ -61,7 +61,7 @@ $hover: #f1fcff;
   font-weight: 400;
 }
 
-.filter-check {
+.check {
   position: absolute;
   background-image: url(../../img/Checkbox0.svg);
   width: 20px;
@@ -70,6 +70,6 @@ $hover: #f1fcff;
   transform: translateY(50%);
 }
 
-.filter-box:checked + .filter-check {
+.box:checked + .check {
   background-image: url(../../img/Checkbox1.svg);
 }

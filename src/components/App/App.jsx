@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './App.module.scss';
-import Filters from '../Filters/Filters';
+import Tabs from '../Tabs/Tabs';
 import TicketList from '../TicketsList/TicketsList';
 import Sidebar from '../Sidebar/Sidebar';
 import logo from '../../img/Logo.svg';
@@ -13,7 +13,7 @@ const App = () => (
 	  <main>
 		  <Sidebar />
 		  <section className={classes.tickets} >
-			  <Filters />
+			  <Tabs />
 			  <TicketList />
 		  </section>
 		{/* <button className={classes.btn} type="button">
