@@ -1,31 +1,35 @@
 const initialState = {
 	filter: {
-		checkAll: false,
+		all: false,
+		withoutTrans: false,
+		oneTrans: false,
+		twoTrans: false,
+		threeTrans: false,
 	},
-	tabCheap: true,
+	cheapest: true,
 }
 
-const reducer = (state = initialState, actions) => {
+const reducer = (state = initialState, action) => {
 	const newState = {...state};
 
 	switch (true) {
-		case actions.type === 'ALL' && newState.filter.checkAll:
+		case action.type === 'ALL' && newState.filter.all:
 			for (const key in newState.filter) {
 				if (key) {
 					newState.filter[key] = false;
 				}
 			}
-
 			return newState;
 
-		case actions.type === 'ALL':
+		case action.type === 'ALL':
 			for (const key in newState.filter) {
 				if (key) {
 					newState.filter[key] = true;
 				}
 			}
+			return newState;
 
-			default:
+		default:
 				return state;
 	}
 }

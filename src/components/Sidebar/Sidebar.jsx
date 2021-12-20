@@ -1,7 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import classes from './Sidebar.module.scss';
+import * as actions from '../../redux/actions';
+import cn from 'classnames';
 
-const Sidebar = () => (
+const Sidebar = ({}) => {
+	const getClass = (check) => cn(classes['visible-check'], {
+		[classes['visible-checked']]: check
+	})
+	return(
   <form className={classes.sidebar}>
 	  <fieldset className={classes.filter}>
 		  <legend className={classes.legend}>
@@ -34,7 +41,7 @@ const Sidebar = () => (
 		  </label>
 		  
 	  </fieldset>
-  </form>
-);
+  </form>)
+};
 
 export default Sidebar;
