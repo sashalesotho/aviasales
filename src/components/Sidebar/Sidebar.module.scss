@@ -49,7 +49,7 @@ $hover: #f1fcff;
   margin-top: 20px;
 }
 
-.abel + .box {
+.label + .box {
   margin: 0;
 }
 
@@ -61,7 +61,7 @@ $hover: #f1fcff;
   font-weight: 400;
 }
 
-.check {
+.visible-check {
   position: absolute;
   background-image: url(../../img/Checkbox0.svg);
   width: 20px;
@@ -70,6 +70,11 @@ $hover: #f1fcff;
   transform: translateY(50%);
 }
 
-.box:checked + .check {
+.visible-checked {
+  position: absolute;
   background-image: url(../../img/Checkbox1.svg);
+  width: 20px;
+  height: 20px;
+  margin-left: -30px;
+  transform: translateY(50%);
 }

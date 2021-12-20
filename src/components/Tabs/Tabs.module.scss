@@ -13,7 +13,6 @@ $font: #4a4a4a;
   flex-grow: 1;
   background-color: $bg-color;
   border: 1px solid #dfe5ec;
-  color: $font;
   transition: 200ms;
   cursor: pointer;
   line-height: 20px;
@@ -33,4 +32,11 @@ $font: #4a4a4a;
 .button:active {
   background-color: $active;
   color: $bg-color;
+  outline: none;
+}
+
+.button-selected {
+  border-color: $active;
+  color: $bg-color;
+  outline: none;
 }
