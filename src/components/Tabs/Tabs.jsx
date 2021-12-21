@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './Tabs.module.scss';
 import { connect } from 'react-redux';
 import cn from 'classnames';
-
+import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions';
 
 
@@ -17,7 +17,7 @@ const Tabs = ({cheapest, fastest, cheapestTab}) => {
 	return (
   <div className={classes.container}>
 	  <button className={cheapestTabCn} type='button' onClick={cheapest}>
-	  Самый дешевый, {cheapestTab}
+	  Самый дешевый
 	  </button>
 	  <button className={fastestTabCn} type='button' onClick={fastest}>
 	  Самый быстрый
@@ -33,4 +33,8 @@ const mapStateToProps = (state) => ({
 	cheapestTab: state.cheapestTab,
 })
 
-export default connect(mapStateToProps, actions)(Tabs);
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators(actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tabs);

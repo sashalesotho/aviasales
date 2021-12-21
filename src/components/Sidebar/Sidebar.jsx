@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import classes from './Sidebar.module.scss';
 import * as actions from '../../redux/actions';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
-const Sidebar = ({ showAll, withoutTrans, oneTrans, twoTrans, threeTrans, all, none, one, two, three }) => {
+const Sidebar = ({ checkAll, withoutTrans, oneTrans, twoTrans, threeTrans, all, none, one, two, three }) => {
 	const getClass = (check) => cn(classes['visible-check'], {
 		[classes['visible-checked']]: check
 	})
@@ -17,7 +18,7 @@ const Sidebar = ({ showAll, withoutTrans, oneTrans, twoTrans, threeTrans, all, n
 		  </legend>
 		  <label className={classes.label}>
 			  <input className={classes.box} type='checkbox' name='all' id='' onClick={all}/>
-			  <span className={getClass(showAll)} />
+			  <span className={getClass(checkAll)} />
 			  <p>Все</p>
 		  </label>
 		  <label className={classes.label}>
@@ -46,7 +47,7 @@ const Sidebar = ({ showAll, withoutTrans, oneTrans, twoTrans, threeTrans, all, n
 };
 
 Sidebar.propTypes = {
-	showAll: PropTypes.bool.isRequired,
+	checkAll: PropTypes.bool.isRequired,
 	withoutTrans: PropTypes.bool.isRequired,
 	oneTrans: PropTypes.bool.isRequired,
 	twoTrans: PropTypes.bool.isRequired,
@@ -59,11 +60,15 @@ Sidebar.propTypes = {
  };
 
 const mapStateToProps = (state) => ({
-	showAll: state.filter.showAll,
+	checkAll: state.filter.checkAll,
 	withoutTrans: state.filter.withoutTrans,
 	oneTrans: state.filter.oneTrans,
 	twoTrans: state.filter.twoTrans,
 	threeTrans: state.filter.threeTrans,
-})
+});
 
-export default connect(mapStateToProps, actions)(Sidebar);
+const mapDispatchToProps = (dispatch) => {
+	return bindActionCreators(actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
