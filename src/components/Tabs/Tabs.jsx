@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import cn from 'classnames';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../redux/actions';
+import PropTypes from 'prop-types';
 
 
 const Tabs = ({cheapest, fastest, cheapestTab}) => {
@@ -27,6 +28,12 @@ const Tabs = ({cheapest, fastest, cheapestTab}) => {
 	  </button>
   </div>
 );
+}
+
+Tabs.propTypes = {
+	cheapestTab: PropTypes.bool.isRequired,
+	cheapest: PropTypes.func.isRequired,
+	fastest: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => ({

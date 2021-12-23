@@ -7,12 +7,24 @@ const initialState = {
 		threeTrans: false,
 	},
 	cheapestTab: true,
+
+	searchId: null,
+
+	tickets: [],
 }
 
 const reducer = (state = initialState, action) => {
 	const newState = {...state};
 
 	switch (true) {
+		case action.type === 'TICKETS':
+			newState.tickets = action.payload;
+			return newState;
+
+		case action.type === 'SEARCH_ID':
+			newState.searchId = action.payload;
+			return newState;
+
 		case action.type === 'ALL' && newState.filter.checkAll:
 			for (const key in newState.filter) {
 				if (key) {
@@ -58,7 +70,7 @@ const reducer = (state = initialState, action) => {
 			return newState;
 
 		default:
-				return state;
+			return state;
 	}
 }
 
