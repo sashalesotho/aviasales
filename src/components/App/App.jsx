@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import * as actions from '../../redux/actions';
 import classes from './App.module.scss';
 import Tabs from '../Tabs/Tabs';
 import TicketList from '../TicketsList/TicketsList';
 import Sidebar from '../Sidebar/Sidebar';
 import logo from '../../img/Logo.svg';
-import PropTypes from 'prop-types';
 
 const App = ({ getSearchId, getTickets }) => {
 	useEffect(() => {

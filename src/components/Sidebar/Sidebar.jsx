@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import classes from './Sidebar.module.scss';
-import * as actions from '../../redux/actions';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
+import classes from './Sidebar.module.scss';
+import * as actions from '../../redux/actions';
 
 const Sidebar = ({ checkAll, withoutTrans, oneTrans, twoTrans, threeTrans, all, none, one, two, three }) => {
 	const getClass = (check) => cn(classes['visible-check'], {
-		[classes['visible-checked']]: check
+		[classes['visible-checked']]: check,
 	})
 	return(
   <form className={classes.sidebar}>
@@ -67,8 +67,7 @@ const mapStateToProps = (state) => ({
 	threeTrans: state.filter.threeTrans,
 });
 
-const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators(actions, dispatch);
-}
+const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
