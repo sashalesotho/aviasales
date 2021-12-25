@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
+import { Alert, Spin } from 'antd';
 import * as actions from '../../redux/actions';
 import classes from './App.module.scss';
 import Tabs from '../Tabs/Tabs';
@@ -9,39 +10,69 @@ import TicketList from '../TicketsList/TicketsList';
 import Sidebar from '../Sidebar/Sidebar';
 import logo from '../../img/Logo.svg';
 
-const App = ({ getSearchId, getTickets }) => {
+const App = ({ getSearchId, getTickets, getMoreTickets, showMoreTickets, loading, moreTicketsErr, searchIdErr, ticketsErr, checkBox }) => {
 	useEffect(() => {
 		getSearchId().then((res) => {
 			getTickets(res);
+			getMoreTickets(res);
 		});
-	}, [getSearchId, getTickets]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const checkBoxActive = () => Object.values(checkBox).includes(true);
 
 	return (
   <div className={classes.container}>
 	  <header>
 		  <img className={classes.logo} src={logo} alt="logo" />
 	  </header>
-	  <main>
-		  <Sidebar />
-		  <section className={classes.tickets} >
-			  <Tabs />
-			  <TicketList />
+	  {searchIdErr ? (
+		  <Alert message='не удалось получить ID поиска' type='error' showIcon closable />
+	  ) : (
+		<main>
+		<Sidebar />
+		<section className={classes.tickets} >
+			<Tabs />
+			{ticketsErr ? <Alert message='произошла ошибка при запросе данных' type='error' showIcon closable /> :  <TicketList />}
+			{loading ? (
+ 					<Spin size="large" className={classes.spin} />
+			) : (
+				<button className={classes.btn} type="button" onClick={showMoreTickets}>
+      			ПОКАЗАТЬ ЕЩЁ
+				</button>
+			)}
+			{moreTicketsErr && checkBoxActive() && (
+				<Alert message='это все билеты, что удалось получить' type='warning' showIcon closable />
+			)}		 
 		  </section>
-		{/* <button className={classes.btn} type="button">
-      ПОКАЗАТЬ ЕЩЁ
-		</button> */}
-	  </main>	  
+	  </main>	 
+	  )} 
   </div>
 )}
 
 App.propTypes = {
 	getSearchId: PropTypes.func.isRequired,
 	getTickets: PropTypes.func.isRequired,
+	getMoreTickets: PropTypes.func.isRequired,
+	showMoreTickets: PropTypes.func.isRequired,
+	loading: PropTypes.bool.isRequired,
+	moreTicketsErr: PropTypes.bool.isRequired,
+	searchIdErr: PropTypes.bool.isRequired,
+	ticketsErr: PropTypes.bool.isRequired,
+	checkBox: PropTypes.objectOf(PropTypes.bool).isRequired,
 };
 
+const mapStateToProps = (state) => ({
+	loading: state.mainReducer.loading,
+	moreTicketsErr: state.errorReducer.moreTicketsErr,
+	searchIdErr: state.errorReducer.searchIdErr,
+	tickets: state.mainReducer.tickets,
+	checkBox: state.filter,
+})
+
 const mapDispatchToProps = (dispatch) => {
-	const { getSearchId, getTickets } = bindActionCreators(actions, dispatch);
-	return { getSearchId, getTickets };
+	const { getSearchId, getTickets, getMoreTickets, showMoreTickets } = bindActionCreators(actions, dispatch);
+	return { getSearchId, getTickets, getMoreTickets, showMoreTickets };
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

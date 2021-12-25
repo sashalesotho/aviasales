@@ -10,7 +10,7 @@ const Sidebar = ({ checkAll, withoutTrans, oneTrans, twoTrans, threeTrans, all, 
 	const getClass = (check) => cn(classes['visible-check'], {
 		[classes['visible-checked']]: check,
 	})
-	return(
+	return (
   <form className={classes.sidebar}>
 	  <fieldset className={classes.filter}>
 		  <legend className={classes.legend}>

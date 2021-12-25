@@ -1,95 +1,83 @@
 import { nanoid } from 'nanoid';
 
-import {
-  allType,
-  noneType,
-  oneType,
-  twoType,
-  threeType,
-  cheapType,
-  notCheapType,
-  showMoreTicketsType,
-  setRestTicketsErrorType,
-  setSearchIdErrorType,
-  setTicketsErrorType,
-  setTicketsType,
-  setSearchIdType,
-  setRestTicketsType,
-} from './actionTypes';
+const ALL = 'ALL';
+const NONE = 'NONE';
+const ONE = 'ONE';
+const TWO = 'TWO';
+const THREE = 'THREE';
+const CHEAPEST = 'CHEAPEST';
+const FASTEST = 'FASTEST';
+const SHOW_MORE_TICKETS = 'SHOW_MORE_TICKETS';
+const MORE_TICKETS_ERROR = 'SET_MORE_TICKETS_ERROR';
+const SET_SEARCH_ID_ERROR = 'SET_SEARCH_ID_ERROR';
+const SET_TICKETS_ERROR = 'SET_TICKETS_ERROR';
+const SET_SEARCH_ID = 'SEARCH_ID';
+const SET_TICKETS = 'TICKETS';
+const SET_MORE_TICKETS = 'SET_MORE_TICKETS';
 
-export const all = () => ({ type: allType });
+export const all = () => ({ type: ALL });
+export const none = () => ({ type: NONE });
+export const one = () => ({ type: ONE });
+export const two = () => ({ type: TWO });
+export const three = () => ({ type: THREE });
+export const cheapest = () => ({ type: CHEAPEST });
+export const fastest = () => ({ type: FASTEST });
 
-export const none = () => ({ type: noneType });
+export const showMoreTickets = () => ({ type: SHOW_MORE_TICKETS });
 
-export const one = () => ({ type: oneType });
+export const moreTicketsErr = () => ({ type: MORE_TICKETS_ERROR });
+export const setSearchIdErr = () => ({ type: SET_SEARCH_ID_ERROR });
+export const setTicketsErr = () => ({ type: SET_TICKETS_ERROR });
 
-export const two = () => ({ type: twoType });
-
-export const three = () => ({ type: threeType });
-
-export const cheap = () => ({ type: cheapType });
-
-export const notCheap = () => ({ type: notCheapType });
-
-export const showMoreTickets = () => ({ type: showMoreTicketsType });
-
-export const setRestTicketsError = () => ({ type: setRestTicketsErrorType });
-
-export const setSearchIdError = () => ({ type: setSearchIdErrorType });
-
-export const setTicketsError = () => ({ type: setTicketsErrorType });
-
-export const setSearchId = (payload) => ({ type: setSearchIdType, payload });
-
-export const setTickets = (payload) => ({ type: setTicketsType, payload });
-
-export const setRestTickets = (payload) => ({ type: setRestTicketsType, payload });
+export const setSearchId = (payload) => ({ type: SET_SEARCH_ID, payload });
+export const setTickets = (payload) => ({ type: SET_TICKETS, payload });
+export const setMoreTickets = (payload) => ({ type: SET_MORE_TICKETS, payload });
 
 // eslint-disable-next-line consistent-return
 export const getSearchId = () => async (dispatch) => {
-  let resp = await fetch(`https://front-test.beta.aviasales.ru/search`);
-  if (resp.ok) {
-    resp = await resp.json();
-    dispatch(setSearchId(resp.searchId));
-    return resp.searchId;
+  let res = await fetch(`https://front-test.beta.aviasales.ru/search`);
+  if (res.ok) {
+    res = await res.json();
+    dispatch(setSearchId(res.searchId));
+    return res.searchId;
   }
-  dispatch(setSearchIdError());
+  dispatch(setSearchIdErr());
 };
 
-export const getTickets = (srchId) => async (disppatch) => {
-  let resp = await fetch(`https://front-test.beta.aviasales.ru/tickets?searchId=${srchId}`); // добавить равно перед доларом
-  if (resp.ok) {
-    resp = await resp.json();
-    const respWithIds = resp.tickets.map((el) => {
+export const getTickets = (srcId) => async (dispatch) => {
+  let res = await fetch(`https://front-test.beta.aviasales.ru/tickets?searchId=${srcId}`);
+  if (res.ok) {
+    res = await res.json();
+    const resWithId = res.tickets.map((item) => {
       // eslint-disable-next-line no-param-reassign
-      el.id = nanoid();
-      return el;
+      item.id = nanoid();
+      return item;
     });
-    disppatch(setTickets(respWithIds));
-  } else disppatch(setTicketsError());
+    dispatch(setTickets(resWithId));
+  } else dispatch(setTicketsErr());
 };
 
-export const getRestTickets = (srchId) => async (dispatch) => {
-  const restTcikets = [];
+export const getMoreTickets = (srcId) => async (dispatch) => {
+  const moreTickets = [];
   for (let i = false; i !== true; ) {
     // eslint-disable-next-line no-await-in-loop
-    let response = await fetch(`https://front-test.beta.aviasales.ru/tickets?searchId=${srchId}`);
+    let response = await fetch(`https://front-test.beta.aviasales.ru/tickets?searchId=${srcId}`);
     if (response.ok) {
       if (response.stop === true) {
         break;
       }
       // eslint-disable-next-line no-await-in-loop
       response = await response.json();
-      response = response.tickets.map((el) => {
+      response = response.tickets.map((item) => {
         // eslint-disable-next-line no-param-reassign
-        el.id = nanoid();
-        return el;
+        item.id = nanoid();
+        return item;
       });
-      restTcikets.push(...response);
+      moreTickets.push(...response);
     } else {
-      dispatch(setRestTicketsError());
+      dispatch(moreTicketsErr());
       break;
     }
   }
-  dispatch(setRestTickets(restTcikets));
+  dispatch(setMoreTickets(moreTickets));
 };

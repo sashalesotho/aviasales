@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classes from './Ticket.module.scss';
-import S7logo from '../../img/S7Logo.svg';
 
-const Ticket = ({ to, from, price }) => {
+const Ticket = ({ to, from, price, carrier }) => {
 
 	const zeroPlus = (time) => {
 		if (time < 10) {
@@ -42,7 +41,7 @@ const Ticket = ({ to, from, price }) => {
 		 <p>{`${price} Р`}</p>
 	 </li>
 	 <li className={classes.container}>
-		 <img className={classes.img} src={S7logo} alt='logo S7' />
+		 <img className={classes.img} src={`https://pics.avs.io/99/36/${carrier}.png`} alt={carrier} />
 	 </li>
 	 <li className={classes.item}>
 		 <p className={classes.attr}>{to.toFrom}</p>
@@ -77,6 +76,7 @@ Ticket.propTypes = {
 	// eslint-disable-next-line react/forbid-prop-types
 	from: PropTypes.object.isRequired,
 	price: PropTypes.string.isRequired,
+	carrier: PropTypes.string.isRequired,
 }
 
 export default Ticket;

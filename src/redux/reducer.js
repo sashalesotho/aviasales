@@ -1,16 +1,16 @@
 const initialState = {
 	filter: {
-		checkAll: false,
-		withoutTrans: false,
-		oneTrans: false,
-		twoTrans: false,
-		threeTrans: false,
+		checkAll: true,
+		withoutTrans: true,
+		oneTrans: true,
+		twoTrans: true,
+		threeTrans: true,
 	},
 	moreTickets: true,
 
-	ticketsError: false,
-	searchIdError: false,
-	moreTicketsError: false,
+	ticketsErr: false,
+	searchIdErr: false,
+	moreTicketsErr: false,
 
 	ticketsToShow: 10,
 	cheapestTab: true,
@@ -32,15 +32,15 @@ const reducer = (state = initialState, action) => {
 				newState.searchIdError = true;
 				return newState;
 		
-		case action.type === 'GET_REST_TICKETS_ERROR':
-				newState.moreTicketsError = true;
+		case action.type === 'GET_MORE_TICKETS_ERROR':
+				newState.moreTicketsErr = true;
 				return newState;
 		
 		case action.type === 'SHOW_MORE_TICKETS':
 				newState.ticketsToShow += 5;
 				return newState;
 		
-		case action.type === 'REST_TICKETS':
+		case action.type === 'MORE_TICKETS':
 				newState.tickets.push(...action.payload);
 				newState.moreTickets = false;
 				return newState;

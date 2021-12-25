@@ -70,3 +70,9 @@ main {
   color: $bg-color;
   outline: none;
 }
+
+.spin {
+  transform: scale(2);
+  display: block;
+  margin-top: 100px;
+}
