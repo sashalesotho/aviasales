@@ -10,7 +10,7 @@ import TicketList from '../TicketsList/TicketsList';
 import Sidebar from '../Sidebar/Sidebar';
 import logo from '../../img/Logo.svg';
 
-const App = ({ getSearchId, getTickets, getMoreTickets, showMoreTickets, loading, moreTicketsErr, searchIdErr, ticketsErr, checkBox }) => {
+const App = ({ getSearchId, getTickets, getMoreTickets, showMoreTickets, loading, searchIdErr, ticketsErr }) => {
 	useEffect(() => {
 		getSearchId().then((res) => {
 			getTickets(res);
@@ -18,8 +18,6 @@ const App = ({ getSearchId, getTickets, getMoreTickets, showMoreTickets, loading
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	const checkBoxActive = () => Object.values(checkBox).includes(true);
 
 	return (
   <div className={classes.container}>
@@ -40,10 +38,7 @@ const App = ({ getSearchId, getTickets, getMoreTickets, showMoreTickets, loading
 				<button className={classes.btn} type="button" onClick={showMoreTickets}>
       			ПОКАЗАТЬ ЕЩЁ
 				</button>
-			)}
-			{moreTicketsErr && checkBoxActive() && (
-				<Alert message='это все билеты, что удалось получить' type='warning' showIcon closable />
-			)}		 
+			)} 
 		  </section>
 	  </main>	 
 	  )} 
@@ -56,10 +51,8 @@ App.propTypes = {
 	getMoreTickets: PropTypes.func.isRequired,
 	showMoreTickets: PropTypes.func.isRequired,
 	loading: PropTypes.bool.isRequired,
-	moreTicketsErr: PropTypes.bool.isRequired,
 	searchIdErr: PropTypes.bool.isRequired,
 	ticketsErr: PropTypes.bool.isRequired,
-	checkBox: PropTypes.objectOf(PropTypes.bool).isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -67,7 +60,6 @@ const mapStateToProps = (state) => ({
 	moreTicketsErr: state.errorReducer.moreTicketsErr,
 	searchIdErr: state.errorReducer.searchIdErr,
 	tickets: state.mainReducer.tickets,
-	checkBox: state.filter,
 })
 
 const mapDispatchToProps = (dispatch) => {

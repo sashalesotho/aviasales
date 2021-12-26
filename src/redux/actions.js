@@ -8,12 +8,12 @@ const THREE = 'THREE';
 const CHEAPEST = 'CHEAPEST';
 const FASTEST = 'FASTEST';
 const SHOW_MORE_TICKETS = 'SHOW_MORE_TICKETS';
-const MORE_TICKETS_ERROR = 'SET_MORE_TICKETS_ERROR';
-const SET_SEARCH_ID_ERROR = 'SET_SEARCH_ID_ERROR';
-const SET_TICKETS_ERROR = 'SET_TICKETS_ERROR';
-const SET_SEARCH_ID = 'SEARCH_ID';
-const SET_TICKETS = 'TICKETS';
-const SET_MORE_TICKETS = 'SET_MORE_TICKETS';
+const MORE_TICKETS_ERROR = 'MORE_TICKETS_ERROR';
+const SEARCH_ID_ERROR = 'SEARCH_ID_ERROR';
+const TICKETS_ERROR = 'TICKETS_ERROR';
+const SEARCH_ID = 'SEARCH_ID';
+const TICKETS = 'TICKETS';
+const MORE_TICKETS = 'MORE_TICKETS';
 
 export const all = () => ({ type: ALL });
 export const none = () => ({ type: NONE });
@@ -25,13 +25,13 @@ export const fastest = () => ({ type: FASTEST });
 
 export const showMoreTickets = () => ({ type: SHOW_MORE_TICKETS });
 
-export const moreTicketsErr = () => ({ type: MORE_TICKETS_ERROR });
-export const setSearchIdErr = () => ({ type: SET_SEARCH_ID_ERROR });
-export const setTicketsErr = () => ({ type: SET_TICKETS_ERROR });
+export const setMoreTicketsErr = () => ({ type: MORE_TICKETS_ERROR });
+export const setSearchIdErr = () => ({ type: SEARCH_ID_ERROR });
+export const setTicketsErr = () => ({ type: TICKETS_ERROR });
 
-export const setSearchId = (payload) => ({ type: SET_SEARCH_ID, payload });
-export const setTickets = (payload) => ({ type: SET_TICKETS, payload });
-export const setMoreTickets = (payload) => ({ type: SET_MORE_TICKETS, payload });
+export const setSearchId = (payload) => ({ type: SEARCH_ID, payload });
+export const setTickets = (payload) => ({ type: TICKETS, payload });
+export const setMoreTickets = (payload) => ({ type: MORE_TICKETS, payload });
 
 // eslint-disable-next-line consistent-return
 export const getSearchId = () => async (dispatch) => {
@@ -75,7 +75,7 @@ export const getMoreTickets = (srcId) => async (dispatch) => {
       });
       moreTickets.push(...response);
     } else {
-      dispatch(moreTicketsErr());
+      dispatch(setMoreTicketsErr());
       break;
     }
   }

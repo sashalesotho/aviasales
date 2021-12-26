@@ -8,21 +8,20 @@ const initialState = {
 	const newState = { ...state };
  
 	switch (true) {
-	  case action.type === 'SET_TICKETS_ERROR':
+	  case action.type === 'TICKETS_ERROR':
 		 newState.ticketsErr = true;
 		 return newState;
  
-	  case action.type === 'SET_SEARCH_ID_ERROR':
+	  case action.type === 'SEARCH_ID_ERROR':
 		 newState.searchIdErr = true;
 		 return newState;
  
-	  case action.type === 'SET_MORE_TICKETS_ERROR':
-		 newState.moreTicketsErr = true;
-		 return newState;
+	//   case action.type === 'MORE_TICKETS_ERROR':
+	// 	 newState.moreTicketsErr = true;
+	// 	 return newState;
  
 	  default:
 		 return state;
 	}
  };
- 
  export default errorReducer;

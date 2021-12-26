@@ -1,11 +1,8 @@
 const initialState = { 
 	loading: true, 
 	ticketsToShow: 10,
- 
 	searchId: null,
- 
 	tickets: [],
- 
 	cheapestTab: true,
  };
  
@@ -18,7 +15,7 @@ const initialState = {
 		 newState.ticketsToShow += 5;
 		 return newState;
  
-	  case action.type === 'SET_MORE_TICKETS':
+	  case action.type === 'MORE_TICKETS':
 		 newState.tickets.push(...action.payload);
 		 newState.loading = false;
 		 return newState;
