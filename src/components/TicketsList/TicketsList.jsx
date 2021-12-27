@@ -128,12 +128,7 @@ const TicketList = ({
     if (filtered.length === 0) {
       return (
         <li>
-          <Alert
-            className={classes.alert}
-            message="Рейсов, подходящих под заданные фильтры, не найдено"
-            type="info"
-            showIcon
-          />
+          <Alert className={classes.alert} message="Подходящих рейсов не найдено" type="info" showIcon />
         </li>
       );
     }

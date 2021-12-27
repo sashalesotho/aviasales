@@ -17,6 +17,7 @@ const Ticket = ({ to, from, price, carrier }) => {
     const resMin = Math.round(min);
     return `${zeroPlus(resHours)}ч ${zeroPlus(resMin)}м`;
   };
+
   const transConvert = (trans) => {
     if (trans.length === 1) {
       return 'Пересадка';

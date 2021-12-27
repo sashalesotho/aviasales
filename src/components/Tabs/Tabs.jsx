@@ -8,13 +8,13 @@ import classes from './Tabs.module.scss';
 
 const Tabs = ({ cheapest, fastest, optimal, cheapestTab, fastestTab, optimalTab }) => {
   const cheapestTabCn = cn(classes.button, {
-    [classes['button-selected']]: cheapestTab,
+    [classes.selected]: cheapestTab,
   });
   const fastestTabCn = cn(classes.button, {
-    [classes['button-selected']]: fastestTab,
+    [classes.selected]: fastestTab,
   });
   const optimalTabCn = cn(classes.button, {
-    [classes['button-selected']]: optimalTab,
+    [classes.selected]: optimalTab,
   });
 
   return (

@@ -64,7 +64,7 @@ $gray: #4a4a4a;
   font-weight: 400;
 }
 
-.visible-check {
+.check {
   position: absolute;
   background-image: url(../../img/Checkbox0.svg);
   width: 20px;
@@ -73,7 +73,7 @@ $gray: #4a4a4a;
   transform: translateY(50%);
 }
 
-.visible-checked {
+.checked {
   position: absolute;
   background-image: url(../../img/Checkbox1.svg);
   width: 20px;

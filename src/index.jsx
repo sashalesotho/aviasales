@@ -12,10 +12,8 @@ const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOO
 const store = createStore(reducer, composeEnhancers(applyMiddleware(reduxThunk)));
 
 ReactDOM.render(
-	<Provider store={store}>
-			<App />
-	</Provider>
-    ,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
-
