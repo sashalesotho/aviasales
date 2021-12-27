@@ -3,7 +3,7 @@ $font-color: #4a4a4a;
 $active: #2196f3;
 $btn: #ffffff;
 
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
 
 html {
   box-sizing: border-box;
@@ -18,7 +18,7 @@ html {
 body {
   margin: 0;
   background-color: $bg-color;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 600;
   font-size: 12px;
   color: $font-color;
@@ -74,5 +74,6 @@ main {
 .spin {
   transform: scale(2);
   display: block;
-  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
 }

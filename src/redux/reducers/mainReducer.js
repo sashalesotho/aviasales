@@ -4,6 +4,8 @@ const initialState = {
 	searchId: null,
 	tickets: [],
 	cheapestTab: true,
+	fastestTab: false,
+	optimalTab: false,
  };
  
  const reducer = (state = initialState, action) => {
@@ -28,13 +30,23 @@ const initialState = {
 		 newState.searchId = action.payload;
 		 return newState;
  
-	  case action.type === 'CHEAPEST':
-		 newState.cheapestTab = true;
-		 return newState;
+	case action.type === 'CHEAPEST':
+		newState.cheapestTab = true;
+		newState.fastestTab = false;
+		newState.optimalTab = false;
+		return newState;
  
-	  case action.type === 'FASTEST':
-		 newState.cheapestTab = false;
-		 return newState;
+	case action.type === 'FASTEST':
+		newState.cheapestTab = false;
+		newState.fastestTab = true;
+		newState.optimalTab = false;
+		return newState;
+
+	case action.type === 'OPTIMAL':
+		newState.cheapestTab = false;
+		newState.fastestTab = false;
+		newState.optimalTab = true;
+		return newState;
  
 	  default:
 		 return state;

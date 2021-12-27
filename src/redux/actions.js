@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
 const ALL = 'ALL';
 const NONE = 'NONE';
@@ -7,6 +7,7 @@ const TWO = 'TWO';
 const THREE = 'THREE';
 const CHEAPEST = 'CHEAPEST';
 const FASTEST = 'FASTEST';
+const OPTIMAL = 'OPTIMAL';
 const SHOW_MORE_TICKETS = 'SHOW_MORE_TICKETS';
 const MORE_TICKETS_ERROR = 'MORE_TICKETS_ERROR';
 const SEARCH_ID_ERROR = 'SEARCH_ID_ERROR';
@@ -22,6 +23,7 @@ export const two = () => ({ type: TWO });
 export const three = () => ({ type: THREE });
 export const cheapest = () => ({ type: CHEAPEST });
 export const fastest = () => ({ type: FASTEST });
+export const optimal = () => ({ type: OPTIMAL })
 
 export const showMoreTickets = () => ({ type: SHOW_MORE_TICKETS });
 
