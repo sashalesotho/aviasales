@@ -1,1 +1,1 @@
-https://aviasales-tau-swart.vercel.app
+https://aviasales-sasha1esotho.vercel.app
