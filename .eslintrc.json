@@ -11,6 +11,7 @@
 	  "jest": true
 	},
 	"rules": {
+		"no-shadow": "off",
 		"no-param-reassign": 0,
 	"default-param-last": "off",
 	  "curly": ["error"],

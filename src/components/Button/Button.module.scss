@@ -1,0 +1,27 @@
+$bg-color: #f8ffff;
+$font-color: #4a4a4a;
+$active: #2196f3;
+$btn: #ffffff;
+
+.btn {
+  font-weight: 600;
+  flex-grow: 1;
+  height: 50px;
+  background-color: $btn;
+  border: 1px solid #dfe5ec;
+  transition: 200ms;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  outline: none;
+}
+
+.btn:hover {
+  background-color: $active;
+  color: $bg-color;
+  outline: none;
+}

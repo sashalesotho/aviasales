@@ -1,52 +1,53 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import cn from 'classnames';
-import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import * as actions from '../../redux/actions';
+import { updateSortTabs } from '../../redux/actions';
 import classes from './Tabs.module.scss';
 
-const Tabs = ({ cheapest, fastest, optimal, cheapestTab, fastestTab, optimalTab }) => {
-  const cheapestTabCn = cn(classes.button, {
-    [classes.selected]: cheapestTab,
-  });
-  const fastestTabCn = cn(classes.button, {
-    [classes.selected]: fastestTab,
-  });
-  const optimalTabCn = cn(classes.button, {
-    [classes.selected]: optimalTab,
+const Tabs = ({ sortTabs, updateSortTabs }) => {
+  const tabs = sortTabs.map(({ name, label, isActive }) => {
+    let className = 'classes.button';
+
+    if (isActive) {
+      className = classes.active;
+    }
+
+    const onClick = () => {
+      const newArr = [...sortTabs].map((el) => {
+        if (el.name === name) {
+          el.isActive = true;
+        } else {
+          el.isActive = false;
+        }
+        return el;
+      });
+      updateSortTabs(newArr);
+    };
+    return (
+      <button type="button" onClick={onClick} key={name} onKeyDown={onClick} tabIndex={0} className={className}>
+        {label}
+      </button>
+    );
   });
 
-  return (
-    <div className={classes.container}>
-      <button className={cheapestTabCn} type="button" onClick={cheapest}>
-        Самый дешевый
-      </button>
-      <button className={fastestTabCn} type="button" onClick={fastest}>
-        Самый быстрый
-      </button>
-      <button className={optimalTabCn} type="button" onClick={optimal}>
-        Оптимальный
-      </button>
-    </div>
-  );
+  return <div className={classes.container}>{tabs}</div>;
+};
+
+Tabs.defaultProps = {
+  sortTabs: [],
 };
 
 Tabs.propTypes = {
-  cheapestTab: PropTypes.bool.isRequired,
-  fastestTab: PropTypes.bool.isRequired,
-  optimalTab: PropTypes.bool.isRequired,
-  cheapest: PropTypes.func.isRequired,
-  fastest: PropTypes.func.isRequired,
-  optimal: PropTypes.func.isRequired,
+  sortTabs: PropTypes.arrayOf(PropTypes.object),
+  updateSortTabs: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  cheapestTab: state.cheapestTab,
-  fastestTab: state.fastestTab,
-  optimalTab: state.optimalTab,
+const mapStateToProps = ({ sortTabs }) => ({
+  sortTabs,
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
+const mapDispatchToProps = (dispatch) => ({
+  updateSortTabs: (newSortTabs) => dispatch(updateSortTabs(newSortTabs)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tabs);

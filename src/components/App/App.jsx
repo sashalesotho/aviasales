@@ -1,76 +1,80 @@
-import React, { useEffect } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { Alert, Spin } from 'antd';
-import * as actions from '../../redux/actions';
 import classes from './App.module.scss';
 import Tabs from '../Tabs/Tabs';
-import TicketList from '../TicketsList/TicketsList';
+import TicketsList from '../TicketsList/TicketsList';
 import Sidebar from '../Sidebar/Sidebar';
 import logo from '../../img/Logo.svg';
 import 'antd/dist/antd.css';
+import apiService from '../../services/apiService';
+import { getTicketsList, updateSearchId, ticketsError } from '../../redux/actions';
+import Loader from '../Loader';
 
-const App = ({ getSearchId, getTickets, getMoreTickets, showMoreTickets, loading, searchIdErr, ticketsErr }) => {
-  useEffect(() => {
-    getSearchId().then((res) => {
-      getTickets(res);
-      getMoreTickets(res);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+class App extends Component {
+  componentDidMount() {
+    const { updateSearchId, getTicketsList, ticketsError } = this.props;
+    apiService
+      .getSearchId()
+      .then((searchId) => {
+        updateSearchId(searchId);
+        getTicketsList(searchId);
+      })
+      .catch((err) => {
+        ticketsError(err);
+      });
+  }
 
-  return (
-    <div className={classes.container}>
-      <header>
-        <img className={classes.logo} src={logo} alt="logo" />
-      </header>
-      {searchIdErr ? (
-        <Alert message="не удалось получить ID поиска" type="error" showIcon closable />
-      ) : (
+  componentDidUpdate(prevProps) {
+    const { error, isStop, ticketsList, getTicketsList, searchId } = this.props;
+    if (prevProps.ticketsList !== ticketsList && error === null && isStop === false) {
+      getTicketsList(searchId);
+    }
+  }
+
+  render() {
+    const { error } = this.props;
+    return (
+      <div className={classes.container}>
+        <header>
+          <img className={classes.logo} src={logo} alt="logo" />
+        </header>
         <main>
+          {!error ? <Loader /> : null}
           <Sidebar />
           <section className={classes.tickets}>
             <Tabs />
-            {ticketsErr ? (
-              <Alert message="произошла ошибка при запросе данных" type="error" showIcon closable />
-            ) : (
-              <TicketList />
-            )}
-            {loading ? (
-              <Spin size="large" className={classes.spin} />
-            ) : (
-              <button className={classes.btn} type="button" onClick={showMoreTickets}>
-                ПОКАЗАТЬ ЕЩЁ
-              </button>
-            )}
+            <TicketsList />
           </section>
         </main>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+}
+
+App.defaultProps = {
+  ticketsList: [],
+  error: false,
+  isStop: false,
+  searchId: '',
 };
 
 App.propTypes = {
-  getSearchId: PropTypes.func.isRequired,
-  getTickets: PropTypes.func.isRequired,
-  getMoreTickets: PropTypes.func.isRequired,
-  showMoreTickets: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
-  searchIdErr: PropTypes.bool.isRequired,
-  ticketsErr: PropTypes.bool.isRequired,
+  ticketsList: PropTypes.arrayOf(PropTypes.object),
+  updateSearchId: PropTypes.func.isRequired,
+  getTicketsList: PropTypes.func.isRequired,
+  ticketsError: PropTypes.func.isRequired,
+  error: PropTypes.bool,
+  isStop: PropTypes.bool,
+  searchId: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-  loading: state.mainReducer.loading,
-  moreTicketsErr: state.errorReducer.moreTicketsErr,
-  searchIdErr: state.errorReducer.searchIdErr,
-  tickets: state.mainReducer.tickets,
+const mapStateToProps = ({ error, isStop, searchId, ticketsList }) => ({ error, isStop, searchId, ticketsList });
+
+const mapDispatchToProps = (dispatch) => ({
+  getTicketsList: (ticketsList) => dispatch(getTicketsList(ticketsList)),
+  updateSearchId: (searchId) => dispatch(updateSearchId(searchId)),
+  ticketsError: (error) => dispatch(ticketsError(error)),
 });
-
-const mapDispatchToProps = (dispatch) => {
-  const { getSearchId, getTickets, getMoreTickets, showMoreTickets } = bindActionCreators(actions, dispatch);
-  return { getSearchId, getTickets, getMoreTickets, showMoreTickets };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,87 +1,147 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import classes from './Ticket.module.scss';
 
-const Ticket = ({ to, from, price, carrier }) => {
-  const zeroPlus = (time) => {
-    if (time < 10) {
-      return `0${time}`;
+const Ticket = ({ ticket, filterItems }) => {
+  const { price, carrier, segments } = ticket;
+
+  const ticketTo = segments[0];
+  const ticketFrom = segments[1];
+
+  const transfNumb = (num, arr) => {
+    switch (num) {
+      case 0:
+        return arr.find((el) => el.name === '0').label;
+      case 1:
+        return arr.find((el) => el.name === '1').label;
+      case 2:
+        return arr.find((el) => el.name === '2').label;
+      case 3:
+        return arr.find((el) => el.name === '3').label;
+      default:
+        return '';
     }
-    return time;
   };
 
-  const timeConvert = (time) => {
-    const hours = time / 60;
-    const resHours = Math.floor(hours);
-    const min = (hours - resHours) * 60;
-    const resMin = Math.round(min);
-    return `${zeroPlus(resHours)}ч ${zeroPlus(resMin)}м`;
+  const transfTo = transfNumb(ticketTo.stops.length, filterItems);
+
+  const transfFrom = transfNumb(ticketFrom.stops.length, filterItems);
+
+  const arrivalDate = (date1, min) => {
+    const date2 = new Date(date1);
+    date2.setMinutes(date2.getMinutes() + min);
+    return date2;
   };
 
-  const transConvert = (trans) => {
-    if (trans.length === 1) {
-      return 'Пересадка';
-    }
-    if (trans.length === 0) {
-      return 'Пересадок';
-    }
-    return 'Пересадки';
+  const departTo = new Date(ticketTo.date);
+  const arrivalTo = arrivalDate(departTo, ticketTo.duration);
+  const departFrom = new Date(ticketFrom.date);
+  const arrivalFrom = arrivalDate(departFrom, ticketFrom.duration);
+
+  const timeConvert = (date) => {
+    /* eslint-disable array-callback-return */
+    /* eslint-disable consistent-return */
+    const arrSrts = [String(date.getHours()), String(date.getMinutes())].map((el) => {
+      if (el.length === 2) {
+        return el;
+        /* eslint-disable no-else-return */
+      } else if (el.length === 1) {
+        /* eslint-disable prefer-template */
+        return '0' + el;
+      } else if (el.length === 0) {
+        return '00' + el;
+      }
+    });
+    return arrSrts.join(':');
   };
 
-  const arrivalTime = (ticketFrom, ticketTo) => {
-    const hoursFrom = new Date(ticketFrom).getHours();
-    const minFrom = new Date(ticketFrom).getMinutes();
-    const fromMsec = Date.parse(new Date(ticketFrom)) + ticketTo * 1000 * 60;
-    const toHours = new Date(fromMsec).getHours();
-    const toMin = new Date(fromMsec).getMinutes();
-    return `${zeroPlus(hoursFrom)}:${zeroPlus(minFrom)} - ${zeroPlus(toHours)}:${zeroPlus(toMin)}`;
+  const depTimeTo = timeConvert(departTo);
+  const arrivTimeTo = timeConvert(arrivalTo);
+  const depTimeFrom = timeConvert(departFrom);
+  const arrivTimeFrom = timeConvert(arrivalFrom);
+
+  const travelTime = (time) => {
+    let strTime = '';
+    /* eslint-disable no-bitwise */
+    const hours = (time / 60) ^ 0;
+
+    if (hours) {
+      let minutes = time % 60;
+      if (minutes < 10) minutes = `0${minutes}`;
+      strTime = `${hours}ч ${minutes}м`;
+    } else {
+      strTime = `${time}м`;
+    }
+    return strTime;
   };
+
+  const travelTimeTo = travelTime(ticketTo.duration);
+  const travelTimeFrom = travelTime(ticketFrom.duration);
+
+  const transfToStr = ticketTo.stops.join(', ');
+  const transfFromStr = ticketFrom.stops.join(', ');
+
+  const priceConvert = (num) => String(num).replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+
+  const strPrice = priceConvert(price);
 
   const logoUrl = `https://pics.avs.io/99/36/${carrier}.png`;
 
   return (
     <ul className={classes.ticket} type="none">
       <li className={classes.price}>
-        <p>{`${price} Р`}</p>
+        <p>{strPrice}</p>
       </li>
       <li className={classes.container}>
         <img className={classes.img} src={logoUrl} alt={carrier} />
       </li>
       <li className={classes.item}>
-        <p className={classes.attr}>{to.toFrom}</p>
-        <p className={classes.value}>{arrivalTime(to.date, to.duration)}</p>
+        <p className={classes.attr}>
+          {ticketTo.destination} - {ticketTo.origin}
+        </p>
+        <p className={classes.value}>
+          {depTimeTo} - {arrivTimeTo}
+        </p>
       </li>
       <li className={classes.item}>
         <p className={classes.attr}>В ПУТИ</p>
-        <p className={classes.value}>{timeConvert(to.duration)}</p>
+        <p className={classes.value}>{travelTimeTo}</p>
       </li>
       <li className={classes.item}>
-        <p className={classes.attr}>{`${to.transfers.length} ${transConvert(to.transfers)}`}</p>
-        <p className={classes.value}>{to.transfers.join(', ')}</p>
+        <p className={classes.attr}>{transfTo}</p>
+        <p className={classes.value}>{transfToStr}</p>
       </li>
       <li className={classes.item}>
-        <p className={classes.attr}>{from.toFrom}</p>
-        <p className={classes.value}>{arrivalTime(from.date, from.duration)}</p>
+        <p className={classes.attr}>
+          {ticketFrom.destination} - {ticketFrom.origin}
+        </p>
+        <p className={classes.value}>
+          {depTimeFrom} - {arrivTimeFrom}
+        </p>
       </li>
       <li className={classes.item}>
         <p className={classes.attr}>В ПУТИ</p>
-        <p className={classes.value}>{timeConvert(from.duration)}</p>
+        <p className={classes.value}>{travelTimeFrom}</p>
       </li>
       <li className={classes.item}>
-        <p className={classes.attr}>{`${from.transfers.length} ${transConvert(from.transfers)}`}</p>
-        <p className={classes.value}>{from.transfers.join(', ')}</p>
+        <p className={classes.attr}>{transfFrom}</p>
+        <p className={classes.value}>{transfFromStr}</p>
       </li>
     </ul>
   );
 };
 
-Ticket.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  to: PropTypes.object.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  from: PropTypes.object.isRequired,
-  price: PropTypes.string.isRequired,
-  carrier: PropTypes.string.isRequired,
+const mapStateToProps = ({ filterItems }) => ({ filterItems });
+
+Ticket.defaultProps = {
+  filterItems: [],
 };
 
-export default Ticket;
+Ticket.propTypes = {
+  filterItems: PropTypes.arrayOf(PropTypes.object),
+  /* eslint-disable react/forbid-prop-types */
+  ticket: PropTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps)(Ticket);

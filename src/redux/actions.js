@@ -1,85 +1,56 @@
-import { nanoid } from 'nanoid';
 
-const ALL = 'ALL';
-const NONE = 'NONE';
-const ONE = 'ONE';
-const TWO = 'TWO';
-const THREE = 'THREE';
-const CHEAPEST = 'CHEAPEST';
-const FASTEST = 'FASTEST';
-const OPTIMAL = 'OPTIMAL';
-const SHOW_MORE_TICKETS = 'SHOW_MORE_TICKETS';
-const MORE_TICKETS_ERROR = 'MORE_TICKETS_ERROR';
-const SEARCH_ID_ERROR = 'SEARCH_ID_ERROR';
-const TICKETS_ERROR = 'TICKETS_ERROR';
-const SEARCH_ID = 'SEARCH_ID';
-const TICKETS = 'TICKETS';
-const MORE_TICKETS = 'MORE_TICKETS';
+import apiService from '../services/apiService';
 
-export const all = () => ({ type: ALL });
-export const none = () => ({ type: NONE });
-export const one = () => ({ type: ONE });
-export const two = () => ({ type: TWO });
-export const three = () => ({ type: THREE });
-export const cheapest = () => ({ type: CHEAPEST });
-export const fastest = () => ({ type: FASTEST });
-export const optimal = () => ({ type: OPTIMAL });
+export const UPDATE_SORT_TABS = 'UPDATE_SORT_TABS';
+export const UPDATE_FILTERS = 'UPDATE_FILTERS';
+export const UPDATE_SEARCH_ID = 'UPDATE_SEARCH_ID';
+export const UPDATE_TICKETS_LIST = 'UPDATE_TICKETS_LIST';
+export const UPDATE_TICKETS_COUNT = 'UPDATE_TICKETS_COUNT';
+export const TOGGLE_STOP = 'TOGGLE_STOP';
+export const TICKETS_ERROR = 'TICKETS_ERROR';
 
-export const showMoreTickets = () => ({ type: SHOW_MORE_TICKETS });
 
-export const setMoreTicketsErr = () => ({ type: MORE_TICKETS_ERROR });
-export const setSearchIdErr = () => ({ type: SEARCH_ID_ERROR });
-export const setTicketsErr = () => ({ type: TICKETS_ERROR });
+export const updateSortTabs = (newSortTabs) => ({
+	type: UPDATE_SORT_TABS,
+	payload: newSortTabs,
+});
 
-export const setSearchId = (payload) => ({ type: SEARCH_ID, payload });
-export const setTickets = (payload) => ({ type: TICKETS, payload });
-export const setMoreTickets = (payload) => ({ type: MORE_TICKETS, payload });
+export const updateFilters = (newFilters) => ({
+	type: UPDATE_FILTERS,
+	payload: newFilters,
+});
 
-// eslint-disable-next-line consistent-return
-export const getSearchId = () => async (dispatch) => {
-  let res = await fetch(`https://front-test.beta.aviasales.ru/search`);
-  if (res.ok) {
-    res = await res.json();
-    dispatch(setSearchId(res.searchId));
-    return res.searchId;
-  }
-  dispatch(setSearchIdErr());
-};
+export const updateSearchId = (searchId) => ({
+	type: UPDATE_SEARCH_ID,
+	payload: searchId,
+})
 
-export const getTickets = (srcId) => async (dispatch) => {
-  let res = await fetch(`https://front-test.beta.aviasales.ru/tickets?searchId=${srcId}`);
-  if (res.ok) {
-    res = await res.json();
-    const resWithId = res.tickets.map((item) => {
-      // eslint-disable-next-line no-param-reassign
-      item.id = nanoid();
-      return item;
-    });
-    dispatch(setTickets(resWithId));
-  } else dispatch(setTicketsErr());
-};
+export const updateTicketsList = (ticketsList) => ({
+	type: UPDATE_TICKETS_LIST,
+	payload: ticketsList,
+})
 
-export const getMoreTickets = (srcId) => async (dispatch) => {
-  const moreTickets = [];
-  for (let i = false; i !== true; ) {
-    // eslint-disable-next-line no-await-in-loop
-    let response = await fetch(`https://front-test.beta.aviasales.ru/tickets?searchId=${srcId}`);
-    if (response.ok) {
-      if (response.stop === true) {
-        break;
-      }
-      // eslint-disable-next-line no-await-in-loop
-      response = await response.json();
-      response = response.tickets.map((item) => {
-        // eslint-disable-next-line no-param-reassign
-        item.id = nanoid();
-        return item;
-      });
-      moreTickets.push(...response);
-    } else {
-      dispatch(setMoreTicketsErr());
-      break;
-    }
-  }
-  dispatch(setMoreTickets(moreTickets));
-};
+export const updateTicketsCount = (newCount) => ({
+	type: UPDATE_TICKETS_COUNT,
+	payload: newCount,
+})
+
+export const toggleStop = (value) => ({
+	type: TOGGLE_STOP,
+	payload: value,
+})
+
+export const ticketsError = (error) => ({
+	type: TICKETS_ERROR,
+	payload: error,
+})
+
+export const getTicketsList = (searchId) => ((dispatch) => {
+	apiService.getTickets(searchId).then((res) => {
+		dispatch(updateTicketsList(res.tickets));
+		if (res.stop) {
+			dispatch(toggleStop(res.stop));
+		}
+	})
+})
+

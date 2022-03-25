@@ -1,71 +1,85 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import cn from 'classnames';
 import PropTypes from 'prop-types';
 import classes from './Sidebar.module.scss';
 import * as actions from '../../redux/actions';
 
-const Sidebar = ({ checkAll, withoutTrans, oneTrans, twoTrans, threeTrans, all, none, one, two, three }) => {
-  const getClass = (check) =>
-    cn(classes.check, {
-      [classes.checked]: check,
-    });
+const Sidebar = ({ filterItems, updateFilters }) => {
+  let countSelectFilters = 0;
+
+  const filters = [...filterItems].map(({ label, name, isCheck }) => {
+    if (isCheck) {
+      countSelectFilters += 1;
+    }
+
+    const onChange = (event) => {
+      const newArr = [...filterItems];
+      if (name === 'all' && isCheck === false) {
+        newArr.map((el) => {
+          el.isCheck = true;
+          return el;
+        });
+      }
+      if (name === 'all' && isCheck === true) {
+        newArr.map((el) => {
+          el.isCheck = false;
+          return el;
+        });
+      }
+
+      if (name !== 'all') {
+        newArr.map((el) => {
+          if (el.name === name) {
+            el.isCheck = event.target.checked;
+            if (!event.target.checked) {
+              countSelectFilters -= 1;
+            }
+          }
+          if (el.name === 'all') {
+            el.isCheck = false;
+          }
+          return el;
+        });
+      }
+
+      if (countSelectFilters === 3 && name !== 'all') {
+        newArr.map((el) => {
+          el.isCheck = true;
+          return el;
+        });
+      }
+
+      updateFilters(newArr);
+    };
+    return (
+      <label className={classes.label}>
+        <input className={classes.input} type="checkbox" checked={isCheck} onChange={onChange} id={name} />
+        <span className={classes.checkbox} />
+        {label}
+      </label>
+    );
+  });
   return (
     <form className={classes.sidebar}>
       <fieldset className={classes.filter}>
         <legend className={classes.legend}>Количество пересадок</legend>
-        <label className={classes.label}>
-          <input className={classes.box} type="checkbox" name="all" id="" onClick={all} />
-          <span className={getClass(checkAll)} />
-          <p>Все</p>
-        </label>
-        <label className={classes.label}>
-          <input className={classes.box} type="checkbox" name="all" id="" onClick={none} />
-          <span className={getClass(withoutTrans)} />
-          <p>Без пересадок</p>
-        </label>
-        <label className={classes.label}>
-          <input className={classes.box} type="checkbox" name="all" id="" onClick={one} />
-          <span className={getClass(oneTrans)} />
-          <p>1 пересадка</p>
-        </label>
-        <label className={classes.label}>
-          <input className={classes.box} type="checkbox" name="all" id="" onClick={two} />
-          <span className={getClass(twoTrans)} />
-          <p>2 пересадки</p>
-        </label>
-        <label className={classes.label}>
-          <input className={classes.box} type="checkbox" name="all" id="" onClick={three} />
-          <span className={getClass(threeTrans)} />
-          <p>3 пересадки</p>
-        </label>
+        {filters}
       </fieldset>
     </form>
   );
 };
 
 Sidebar.propTypes = {
-  checkAll: PropTypes.bool.isRequired,
-  withoutTrans: PropTypes.bool.isRequired,
-  oneTrans: PropTypes.bool.isRequired,
-  twoTrans: PropTypes.bool.isRequired,
-  threeTrans: PropTypes.bool.isRequired,
-  all: PropTypes.func.isRequired,
-  none: PropTypes.func.isRequired,
-  one: PropTypes.func.isRequired,
-  two: PropTypes.func.isRequired,
-  three: PropTypes.func.isRequired,
+  filterItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  updateFilters: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  checkAll: state.filter.checkAll,
-  withoutTrans: state.filter.withoutTrans,
-  oneTrans: state.filter.oneTrans,
-  twoTrans: state.filter.twoTrans,
-  threeTrans: state.filter.threeTrans,
+const mapStateToProps = ({ filterItems }) => ({
+  filterItems,
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
+const mapDispatchToProps = (dispatch) => ({
+  updateFilters: (newFilters) => dispatch(actions.updateFilters(newFilters)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);

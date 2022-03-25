@@ -1,0 +1,9 @@
+.loader {
+  position: relative;
+
+  .bar {
+    position: absolute !important;
+    overflow: hidden;
+    top: 18px !important;
+  }
+}

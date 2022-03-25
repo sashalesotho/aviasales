@@ -37,13 +37,16 @@ $gray: #4a4a4a;
   display: flex;
   transition: 200ms;
   cursor: pointer;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
 }
 
 .label:hover {
   background-color: $hover;
 }
 
-.box {
+.input {
   appearance: none;
   position: absolute;
 }
@@ -52,32 +55,24 @@ $gray: #4a4a4a;
   margin-top: 20px;
 }
 
-.label + .box {
+.label + .input {
   margin: 0;
 }
 
-.label > p {
-  margin: 0;
-  align-self: center;
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 400;
-}
-
-.check {
+.checkbox {
   position: absolute;
   background-image: url(../../img/Checkbox0.svg);
   width: 20px;
   height: 20px;
   margin-left: -30px;
-  transform: translateY(50%);
+  // transform: translateY(50%);
 }
 
-.checked {
+.input:checked + .checkbox {
   position: absolute;
   background-image: url(../../img/Checkbox1.svg);
   width: 20px;
   height: 20px;
   margin-left: -30px;
-  transform: translateY(50%);
+  //transform: translateY(50%);
 }
