@@ -10,17 +10,11 @@ const Ticket = ({ ticket, filterItems }) => {
   const ticketFrom = segments[1];
 
   const transfNumb = (num, arr) => {
-    switch (num) {
-      case 0:
-        return arr.find((el) => el.name === '0').label;
-      case 1:
-        return arr.find((el) => el.name === '1').label;
-      case 2:
-        return arr.find((el) => el.name === '2').label;
-      case 3:
-        return arr.find((el) => el.name === '3').label;
-      default:
-        return '';
+    if (num) {
+      return arr.find((el) => el.name === String(num)).label;
+      /* eslint-disable no-else-return */
+    } else {
+      return '';
     }
   };
 

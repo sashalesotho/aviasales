@@ -26,10 +26,7 @@ const TicketsList = ({ ticketsList, filterItems, sortTabs, error, ticketsCount }
   const filteredArr = newTicketsList.filter((item) => {
     const sumTransfTo = item.segments[0].stops.length;
     const sumTransfFrom = item.segments[1].stops.length;
-
-    if (selectedFilters.includes(sumTransfTo) && selectedFilters.includes(sumTransfFrom)) {
-      return item;
-    }
+    return selectedFilters.includes(sumTransfTo) && selectedFilters.includes(sumTransfFrom);
   });
 
   const sortArr = (arr, strName) => {
